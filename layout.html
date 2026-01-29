@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Seguro - Finalize sua Compra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        'primary-dark': '#1d4ed8',
+                        secondary: '#10b981',
+                        'secondary-dark': '#059669',
+                        accent: '#f59e0b',
+                        danger: '#ef4444',
+                        dark: '#1f2937',
+                        light: '#f9fafb'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        .trust-badge {
+            transition: transform 0.2s ease;
+        }
+        
+        .trust-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        .countdown-timer {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .product-highlight {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 antialiased min-h-screen">
+    <!-- Header Minimalista -->
+    <header class="bg-white border-b border-gray-200 py-4 px-4 lg:px-8">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-2xl font-bold text-primary">
+                    <i class="fas fa-shopping-bag mr-2"></i>SuaLoja
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center text-sm text-gray-600">
+                    <i class="fas fa-lock text-secondary mr-2"></i>
+                    <span>Checkout 100% Seguro</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Urgency Banner -->
+    <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 px-4">
+        <div class="max-w-5xl mx-auto flex items-center justify-center text-sm font-medium">
+            <i class="fas fa-bolt mr-2 countdown-timer"></i>
+            <span>Oferta especial! <strong id="countdown">14:59</strong> restantes para garantir este preço</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="py-8 px-4 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Formulário de Checkout -->
+                <div class="lg:col-span-7">
+                    <form id="checkoutForm" class="space-y-6">
+                        
+                        <!-- Seção: Dados Pessoais -->
+                        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in">
+                            <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                                <i class="fas fa-user-circle text-primary mr-2"></i>
+                                Seus Dados
+                            </h2>
+                            
+                            <div class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Nome <span class="text-danger">*</span>
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="firstName" 
+                                            name="firstName"
+                                            required
+                                            placeholder="João"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                        >
+                                    </div>
+                                    <div>
+                                        <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Sobrenome <span class="text-danger">*</span>
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="lastName" 
+                                            name="lastName"
+                                            required
+                                            placeholder="Silva"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                        >
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                                        E-mail <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input 
+                                            type="email" 
+                                            id="email" 
+                                            name="email"
+                                            required
+                                            placeholder="seu@email.com"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                        >
+                                        <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Você receberá o acesso ao produto neste e-mail
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <label for="cpf" class="block text-sm font-medium text-gray-700 mb-1">
+                                        CPF <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input 
+                                            type="text" 
+                                            id="cpf" 
+                                            name="cpf"
+                                            required
+                                            placeholder="000.000.000-00"
+                                            maxlength="14"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                        >
+                                        <i class="fas fa-id-card absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        <i class="fas fa-shield-alt mr-1 text-secondary"></i>
+                                        Necessário para emissão da nota fiscal
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Telefone/WhatsApp <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input 
+                                            type="tel" 
+                                            id="phone" 
+                                            name="phone"
+                                            required
+                                            placeholder="(11) 99999-9999"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                        >
+                                        <i class="fab fa-whatsapp absolute right-4 top-1/2 -translate-y-1/2 text-green-500"></i>
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        <i class="fas fa-shield-alt mr-1 text-secondary"></i>
+                                        Usado apenas para confirmação do pedido. Nunca compartilhamos seus dados.
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Seção: Pagamento -->
+                        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in">
+                            <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                                <i class="fas fa-credit-card text-primary mr-2"></i>
+                                Forma de Pagamento
+                            </h2>
+                            
+                            <!-- Tabs de Pagamento -->
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <button type="button" class="payment-tab active flex-1 sm:flex-none px-6 py-3 rounded-xl font-medium text-sm transition-all bg-primary text-white border-2 border-primary" data-tab="card">
+                                    <i class="fas fa-credit-card mr-2"></i>Cartão de Crédito
+                                </button>
+                                <button type="button" class="payment-tab flex-1 sm:flex-none px-6 py-3 rounded-xl font-medium text-sm transition-all bg-white text-gray-700 border-2 border-gray-200 hover:border-primary" data-tab="pix">
+                                    <i class="fas fa-qrcode mr-2"></i>PIX
+                                    <span class="ml-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold rounded-full">5% OFF</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Cartão de Crédito -->
+                            <div id="cardPayment" class="payment-content">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="cardNumber" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Número do Cartão <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input 
+                                                type="text" 
+                                                id="cardNumber" 
+                                                name="cardNumber"
+                                                placeholder="0000 0000 0000 0000"
+                                                maxlength="19"
+                                                class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none pr-24"
+                                            >
+                                            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex space-x-1">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/100px-Visa_Inc._logo.svg.png" alt="Visa" class="h-5 opacity-50">
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/100px-Mastercard-logo.svg.png" alt="Mastercard" class="h-5 opacity-50">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="cardName" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Nome no Cartão <span class="text-danger">*</span>
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="cardName" 
+                                            name="cardName"
+                                            placeholder="NOME COMO ESTÁ NO CARTÃO"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none uppercase"
+                                        >
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="cardExpiry" class="block text-sm font-medium text-gray-700 mb-1">
+                                                Validade <span class="text-danger">*</span>
+                                            </label>
+                                            <input 
+                                                type="text" 
+                                                id="cardExpiry" 
+                                                name="cardExpiry"
+                                                placeholder="MM/AA"
+                                                maxlength="5"
+                                                class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                            >
+                                        </div>
+                                        <div>
+                                            <label for="cardCvv" class="block text-sm font-medium text-gray-700 mb-1">
+                                                CVV <span class="text-danger">*</span>
+                                                <span class="tooltip text-gray-400 cursor-help ml-1" data-tooltip="3 dígitos no verso do cartão">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </span>
+                                            </label>
+                                            <input 
+                                                type="text" 
+                                                id="cardCvv" 
+                                                name="cardCvv"
+                                                placeholder="123"
+                                                maxlength="4"
+                                                class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                                            >
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label for="installments" class="block text-sm font-medium text-gray-700 mb-1">
+                                            Parcelas
+                                        </label>
+                                        <select 
+                                            id="installments" 
+                                            name="installments"
+                                            class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-white"
+                                        >
+                                            <!-- Opções serão preenchidas via JavaScript -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- PIX -->
+                            <div id="pixPayment" class="payment-content hidden">
+                                <div class="text-center py-6">
+                                    <div class="bg-green-50 border-2 border-green-200 rounded-2xl p-8">
+                                        <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                                            <i class="fas fa-qrcode text-4xl text-green-600"></i>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-gray-900 mb-2">Pague com PIX e economize!</h3>
+                                        <p class="text-gray-600 mb-4">O QR Code será gerado após confirmar o pedido</p>
+                                        <div class="inline-block p-4 bg-white rounded-xl shadow-sm">
+                                            <span class="text-sm text-gray-500 line-through block">De R$ <span id="pixOriginalPrice">297,00</span></span>
+                                            <span class="text-3xl font-bold text-green-600">R$ <span id="pixDiscountPrice">282,15</span></span>
+                                            <span class="block text-sm text-green-600 font-medium mt-1">
+                                                <i class="fas fa-tag mr-1"></i>5% de desconto
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-4 mt-4 text-sm text-gray-500">
+                                        <span><i class="fas fa-bolt text-yellow-500 mr-1"></i>Aprovação instantânea</span>
+                                        <span><i class="fas fa-clock text-blue-500 mr-1"></i>Disponível 24h</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Cupom de Desconto -->
+                        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in">
+                            <div class="flex items-center justify-between">
+                                <button type="button" id="toggleCoupon" class="flex items-center text-primary hover:text-primary-dark font-medium">
+                                    <i class="fas fa-tag mr-2"></i>
+                                    Tem um cupom de desconto?
+                                    <i class="fas fa-chevron-down ml-2 transition-transform" id="couponArrow"></i>
+                                </button>
+                            </div>
+                            <div id="couponForm" class="hidden mt-4">
+                                <div class="flex gap-2">
+                                    <input 
+                                        type="text" 
+                                        id="couponCode" 
+                                        name="couponCode"
+                                        placeholder="Digite o código"
+                                        class="input-field flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none uppercase"
+                                    >
+                                    <button type="button" id="applyCoupon" class="px-6 py-3 bg-gray-800 text-white font-medium rounded-lg hover:bg-gray-700 transition-colors">
+                                        Aplicar
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Botão de Finalizar (Mobile) -->
+                        <div class="lg:hidden">
+                            <button 
+                                type="submit" 
+                                class="btn-primary w-full py-4 bg-gradient-to-r from-secondary to-green-500 text-white font-bold text-lg rounded-xl shadow-lg flex items-center justify-center"
+                            >
+                                <i class="fas fa-lock mr-2"></i>
+                                Finalizar Compra
+                            </button>
+                            <p class="text-center text-xs text-gray-500 mt-3">
+                                <i class="fas fa-shield-alt text-secondary mr-1"></i>
+                                Pagamento 100% seguro e criptografado
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Resumo do Pedido (Sidebar) -->
+                <aside class="lg:col-span-5">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in lg:sticky lg:top-8">
+                        <h2 class="text-xl font-semibold text-gray-900 mb-6">
+                            <i class="fas fa-shopping-cart text-primary mr-2"></i>
+                            Seu Pedido
+                        </h2>
+                        
+                        <!-- Produto Único -->
+                        <div class="mb-6">
+                            <div class="product-highlight p-5 rounded-xl border border-blue-100">
+                                <div class="flex items-center space-x-4">
+                                    <div class="relative flex-shrink-0">
+                                        <img 
+                                            id="productImage"
+                                            src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=200&h=200&fit=crop" 
+                                            alt="Produto Digital" 
+                                            class="w-20 h-20 object-cover rounded-xl shadow-md"
+                                        >
+                                        <div class="absolute -top-2 -right-2 w-6 h-6 bg-secondary text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md">
+                                            <i class="fas fa-check text-xs"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h3 id="productName" class="font-semibold text-gray-900 text-base leading-tight">Curso Completo de Marketing Digital</h3>
+                                        <p id="productDescription" class="text-sm text-gray-500 mt-1">Acesso vitalício + Certificado</p>
+                                        <div class="mt-2">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                <i class="fas fa-infinity mr-1"></i>
+                                                Licença única
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Valores -->
+                        <div class="border-t border-gray-100 pt-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Valor do produto</span>
+                                <span class="text-gray-900" id="subtotalValue">R$ 297,00</span>
+                            </div>
+                            <div class="flex justify-between text-sm hidden" id="discountRow">
+                                <span class="text-secondary">Desconto</span>
+                                <span class="text-secondary" id="discountValue">- R$ 0,00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Total -->
+                        <div class="border-t border-gray-200 mt-4 pt-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-semibold text-gray-900">Total</span>
+                                <div class="text-right">
+                                    <span class="text-2xl font-bold text-gray-900" id="totalValue">R$ 297,00</span>
+                                    <p class="text-xs text-gray-500" id="installmentsInfo">ou 12x de R$ 27,23</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botão de Finalizar (Desktop) -->
+                        <div class="hidden lg:block mt-6">
+                            <button 
+                                type="submit"
+                                form="checkoutForm"
+                                class="btn-primary w-full py-4 bg-gradient-to-r from-secondary to-green-500 text-white font-bold text-lg rounded-xl shadow-lg flex items-center justify-center"
+                            >
+                                <i class="fas fa-lock mr-2"></i>
+                                Finalizar Compra
+                            </button>
+                        </div>
+                        
+                        <!-- Garantia -->
+                        <div class="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-shield-alt text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900 text-sm">Garantia de 7 dias</h4>
+                                    <p class="text-xs text-gray-600">Se não gostar, devolvemos 100% do seu dinheiro</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Trust Badges -->
+                        <div class="mt-6 pt-6 border-t border-gray-100">
+                            <div class="grid grid-cols-3 gap-3 text-center">
+                                <div class="trust-badge">
+                                    <div class="w-10 h-10 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                                        <i class="fas fa-lock text-blue-600"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-600">Compra<br>Segura</span>
+                                </div>
+                                <div class="trust-badge">
+                                    <div class="w-10 h-10 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-2">
+                                        <i class="fas fa-bolt text-green-600"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-600">Acesso<br>Imediato</span>
+                                </div>
+                                <div class="trust-badge">
+                                    <div class="w-10 h-10 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-2">
+                                        <i class="fas fa-headset text-purple-600"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-600">Suporte<br>24h</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Métodos de Pagamento -->
+                        <div class="mt-6 pt-4 border-t border-gray-100">
+                            <p class="text-xs text-gray-500 text-center mb-3">Formas de pagamento</p>
+                            <div class="flex items-center justify-center space-x-3 opacity-60">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/80px-Visa_Inc._logo.svg.png" alt="Visa" class="h-5">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/80px-Mastercard-logo.svg.png" alt="Mastercard" class="h-5">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/80px-American_Express_logo_%282018%29.svg.png" alt="Amex" class="h-5">
+                                <div class="flex items-center text-gray-600">
+                                    <i class="fas fa-qrcode mr-1"></i>
+                                    <span class="text-xs font-medium">PIX</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Proof -->
+                        <div class="mt-6 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex -space-x-2 flex-shrink-0">
+                                    <img src="https://i.pravatar.cc/32?img=1" alt="Cliente" class="w-8 h-8 rounded-full border-2 border-white">
+                                    <img src="https://i.pravatar.cc/32?img=2" alt="Cliente" class="w-8 h-8 rounded-full border-2 border-white">
+                                    <img src="https://i.pravatar.cc/32?img=3" alt="Cliente" class="w-8 h-8 rounded-full border-2 border-white">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-xs text-gray-700">
+                                        <strong>+2.847 alunos</strong> já garantiram acesso
+                                    </p>
+                                    <div class="flex items-center mt-1">
+                                        <div class="flex text-yellow-400 text-xs">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                        <span class="text-xs text-gray-500 ml-1">4.8 (1.234 avaliações)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Minimalista -->
+    <footer class="bg-white border-t border-gray-200 py-6 px-4 mt-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-gray-700">Política de Privacidade</a>
+                    <a href="#" class="hover:text-gray-700">Termos de Uso</a>
+                </div>
+                <div class="flex items-center space-x-2 text-sm text-gray-500">
+                    <i class="fas fa-lock text-green-500"></i>
+                    <span>Ambiente 100% Seguro</span>
+                </div>
+            </div>
+            <p class="text-center text-xs text-gray-400 mt-4">
+                © 2026 SuaLoja. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ==========================================
+        // CONFIGURAÇÃO DO PRODUTO (EDITE AQUI)
+        // ==========================================
+        const PRODUCT = {
+            name: "Curso Completo de Marketing Digital",
+            description: "Acesso vitalício + Certificado",
+            image: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=200&h=200&fit=crop",
+            price: 297.00,
+            pixDiscount: 0.05 // 5% de desconto no PIX
+        };
+
+        // ==========================================
+        // VARIÁVEIS GLOBAIS
+        // ==========================================
+        let paymentMethod = 'card';
+        let couponDiscount = 0;
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initProduct();
+            initCountdown();
+            initPaymentTabs();
+            initCoupon();
+            initFormMasks();
+            initFormValidation();
+            updatePrices();
+        });
+
+        // ==========================================
+        // FUNÇÕES DE INICIALIZAÇÃO
+        // ==========================================
+        function initProduct() {
+            document.getElementById('productName').textContent = PRODUCT.name;
+            document.getElementById('productDescription').textContent = PRODUCT.description;
+            document.getElementById('productImage').src = PRODUCT.image;
+        }
+
+        function initCountdown() {
+            let minutes = 14;
+            let seconds = 59;
+            const countdownEl = document.getElementById('countdown');
+            
+            setInterval(() => {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        minutes = 14;
+                        seconds = 59;
+                    } else {
+                        minutes--;
+                        seconds = 59;
+                    }
+                } else {
+                    seconds--;
+                }
+                countdownEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function initPaymentTabs() {
+            document.querySelectorAll('.payment-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-tab').forEach(t => {
+                        t.classList.remove('bg-primary', 'text-white', 'border-primary');
+                        t.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                    });
+                    
+                    this.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                    this.classList.add('bg-primary', 'text-white', 'border-primary');
+                    
+                    document.querySelectorAll('.payment-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    paymentMethod = this.dataset.tab;
+                    document.getElementById(paymentMethod + 'Payment').classList.remove('hidden');
+                    updatePrices();
+                });
+            });
+        }
+
+        function initCoupon() {
+            document.getElementById('toggleCoupon').addEventListener('click', function() {
+                const couponForm = document.getElementById('couponForm');
+                const couponArrow = document.getElementById('couponArrow');
+                couponForm.classList.toggle('hidden');
+                couponArrow.classList.toggle('rotate-180');
+            });
+
+            document.getElementById('applyCoupon').addEventListener('click', function() {
+                const code = document.getElementById('couponCode').value.trim().toUpperCase();
+                // Exemplo: cupom "DESCONTO10" dá 10% de desconto
+                if (code === 'DESCONTO10') {
+                    couponDiscount = 0.10;
+                    alert('Cupom aplicado com sucesso! 10% de desconto.');
+                } else if (code === 'PROMO20') {
+                    couponDiscount = 0.20;
+                    alert('Cupom aplicado com sucesso! 20% de desconto.');
+                } else {
+                    couponDiscount = 0;
+                    alert('Cupom inválido ou expirado.');
+                }
+                updatePrices();
+            });
+        }
+
+        function initFormMasks() {
+            // CPF Mask
+            document.getElementById('cpf').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 3) value = value.substring(0, 3) + '.' + value.substring(3);
+                if (value.length > 7) value = value.substring(0, 7) + '.' + value.substring(7);
+                if (value.length > 11) value = value.substring(0, 11) + '-' + value.substring(11, 13);
+                e.target.value = value;
+            });
+
+            // Phone Mask
+            document.getElementById('phone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0) value = '(' + value;
+                if (value.length > 3) value = value.substring(0, 3) + ') ' + value.substring(3);
+                if (value.length > 10) value = value.substring(0, 10) + '-' + value.substring(10, 14);
+                e.target.value = value;
+            });
+
+            // Card Number Mask
+            document.getElementById('cardNumber').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                e.target.value = value.substring(0, 19);
+            });
+
+            // Card Expiry Mask
+            document.getElementById('cardExpiry').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 2) value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                e.target.value = value;
+            });
+
+            // CVV - only numbers
+            document.getElementById('cardCvv').addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+            });
+        }
+
+        function initFormValidation() {
+            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const requiredFields = ['firstName', 'lastName', 'email', 'cpf', 'phone'];
+                let isValid = true;
+                
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('border-danger', 'shake');
+                        setTimeout(() => field.classList.remove('shake'), 500);
+                    } else {
+                        field.classList.remove('border-danger');
+                    }
+                });
+
+                // Validar campos de cartão se for pagamento com cartão
+                if (paymentMethod === 'card') {
+                    const cardFields = ['cardNumber', 'cardName', 'cardExpiry', 'cardCvv'];
+                    cardFields.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (!field.value.trim()) {
+                            isValid = false;
+                            field.classList.add('border-danger', 'shake');
+                            setTimeout(() => field.classList.remove('shake'), 500);
+                        } else {
+                            field.classList.remove('border-danger');
+                        }
+                    });
+                }
+
+                // Validar CPF
+                const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+                if (cpf.length !== 11) {
+                    isValid = false;
+                    document.getElementById('cpf').classList.add('border-danger', 'shake');
+                    setTimeout(() => document.getElementById('cpf').classList.remove('shake'), 500);
+                }
+
+                // Validar email
+                const email = document.getElementById('email').value;
+                if (!email.includes('@') || !email.includes('.')) {
+                    isValid = false;
+                    document.getElementById('email').classList.add('border-danger', 'shake');
+                    setTimeout(() => document.getElementById('email').classList.remove('shake'), 500);
+                }
+
+                if (isValid) {
+                    // Aqui você pode enviar os dados para o backend
+                    const formData = {
+                        customer: {
+                            firstName: document.getElementById('firstName').value,
+                            lastName: document.getElementById('lastName').value,
+                            email: document.getElementById('email').value,
+                            cpf: document.getElementById('cpf').value,
+                            phone: document.getElementById('phone').value
+                        },
+                        product: {
+                            name: PRODUCT.name,
+                            quantity: 1,
+                            unitPrice: PRODUCT.price,
+                            total: calculateTotal()
+                        },
+                        payment: {
+                            method: paymentMethod,
+                            installments: paymentMethod === 'card' ? document.getElementById('installments').value : 1
+                        }
+                    };
+
+                    console.log('Dados do pedido:', formData);
+                    alert('Pedido realizado com sucesso! Você receberá o acesso no e-mail informado.');
+                }
+            });
+        }
+
+        // ==========================================
+        // FUNÇÕES DE CÁLCULO E ATUALIZAÇÃO
+        // ==========================================
+        function calculateDiscount() {
+            let discount = PRODUCT.price * couponDiscount;
+            
+            if (paymentMethod === 'pix') {
+                discount += (PRODUCT.price - discount) * PRODUCT.pixDiscount;
+            }
+            
+            return discount;
+        }
+
+        function calculateTotal() {
+            return PRODUCT.price - calculateDiscount();
+        }
+
+        function formatCurrency(value) {
+            return value.toFixed(2).replace('.', ',');
+        }
+
+        function updatePrices() {
+            const discount = calculateDiscount();
+            const total = calculateTotal();
+
+            // Atualizar subtotal
+            document.getElementById('subtotalValue').textContent = `R$ ${formatCurrency(PRODUCT.price)}`;
+
+            // Atualizar desconto
+            const discountRow = document.getElementById('discountRow');
+            if (discount > 0) {
+                discountRow.classList.remove('hidden');
+                document.getElementById('discountValue').textContent = `- R$ ${formatCurrency(discount)}`;
+            } else {
+                discountRow.classList.add('hidden');
+            }
+
+            // Atualizar total
+            document.getElementById('totalValue').textContent = `R$ ${formatCurrency(total)}`;
+
+            // Atualizar parcelas
+            updateInstallments(total);
+
+            // Atualizar preços do PIX
+            document.getElementById('pixOriginalPrice').textContent = formatCurrency(PRODUCT.price);
+            document.getElementById('pixDiscountPrice').textContent = formatCurrency(PRODUCT.price * (1 - PRODUCT.pixDiscount));
+
+            // Atualizar info de parcelas
+            const installment12 = total / 12 * 1.1; // 10% de juros em 12x
+            document.getElementById('installmentsInfo').textContent = `ou 12x de R$ ${formatCurrency(installment12)}`;
+        }
+
+        function updateInstallments(total) {
+            const select = document.getElementById('installments');
+            select.innerHTML = '';
+
+            const installmentOptions = [
+                { qty: 1, interest: 0 },
+                { qty: 2, interest: 0 },
+                { qty: 3, interest: 0 },
+                { qty: 6, interest: 0 },
+                { qty: 10, interest: 0.05 },
+                { qty: 12, interest: 0.10 }
+            ];
+
+            installmentOptions.forEach(opt => {
+                const totalWithInterest = total * (1 + opt.interest);
+                const installmentValue = totalWithInterest / opt.qty;
+                const interestText = opt.interest > 0 ? 'com juros' : 'sem juros';
+                
+                const option = document.createElement('option');
+                option.value = opt.qty;
+                option.textContent = `${opt.qty}x de R$ ${formatCurrency(installmentValue)} (${interestText})`;
+                select.appendChild(option);
+            });
+        }
+    </script>
+</body>
+</html>
