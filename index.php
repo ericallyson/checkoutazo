@@ -314,13 +314,12 @@ if(isset($_GET["telefone_ddi"]) && $_GET["telefone_ddi"] != "" && $telefone_ddi 
 
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
 <title><?php echo APP_TITULO;?></title>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -358,23 +357,139 @@ if(isset($_GET["telefone_ddi"]) && $_GET["telefone_ddi"] != "" && $telefone_ddi 
 
 <link href="css/conteudo.css?v=<?php echo time(); ?>" rel="stylesheet">
 
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#2563eb',
+                    'primary-dark': '#1d4ed8',
+                    secondary: '#10b981',
+                    'secondary-dark': '#059669',
+                    accent: '#f59e0b',
+                    danger: '#ef4444',
+                    dark: '#1f2937',
+                    light: '#f9fafb'
+                }
+            }
+        }
+    }
+</script>
+<style>
+    .input-field {
+        transition: all 0.3s ease;
+    }
+    
+    .input-field:focus {
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    
+    .btn-primary {
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    
+    .trust-badge {
+        transition: transform 0.2s ease;
+    }
+    
+    .trust-badge:hover {
+        transform: scale(1.05);
+    }
+    
+    .countdown-timer {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+    }
+    
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .tooltip {
+        position: relative;
+    }
+    
+    .tooltip:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1f2937;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        white-space: nowrap;
+        z-index: 10;
+    }
+    
+    .shake {
+        animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .product-highlight {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+</style>
 </head>
 
-<body>
+<body class="bg-gray-50 antialiased min-h-screen">
 
-<!-- [INICIO :: DIV GERAL]#########################################################################-->
+<div id="geral" class="min-h-screen">
+    <header class="bg-white border-b border-gray-200 py-4 px-4 lg:px-8">
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a href="#" class="text-2xl font-bold text-primary flex items-center">
+                    <img src="../imagens/logo.png" alt="AZO Benefícios" class="h-8 w-auto mr-2">
+                    <span>AZO Benefícios</span>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center text-sm text-gray-600">
+                    <i class="fas fa-lock text-secondary mr-2"></i>
+                    <span>Checkout 100% Seguro</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<div id="geral">
+    <div class="bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 px-4">
+        <div class="max-w-5xl mx-auto flex items-center justify-center text-sm font-medium">
+            <i class="fas fa-bolt mr-2 countdown-timer"></i>
+            <span>Oferta especial! <strong id="countdown">14:59</strong> restantes para garantir este preço</span>
+        </div>
+    </div>
 
-    <div class="menugeral"></div>
-
-    <!-- [FIM :: MENU]#########################################################################-->
-    
-<div class="container-fluid">
-
-<div class="conteudoInterno" modulo="assinaturas">
-
-    <div class="container">
+    <main class="py-8 px-4 lg:px-8">
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in">
 
         <script src='js/mask-form.js?v=<?php echo time();?>'></script>
 
@@ -752,13 +867,106 @@ if(isset($_GET["telefone_ddi"]) && $_GET["telefone_ddi"] != "" && $telefone_ddi 
 
         <?php }?>
 
-    </div>
+                    </div>
+                </div>
+                <aside class="lg:col-span-5 space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-receipt text-primary mr-2"></i>
+                            Resumo do Plano
+                        </h3>
+                        <div class="space-y-3 text-sm text-gray-600">
+                            <div class="flex items-center justify-between">
+                                <span>Plano selecionado</span>
+                                <span class="font-medium text-gray-900">
+                                    <?php echo $plano != "" ? $plano : "Selecione um plano"; ?>
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span>Valor mensal</span>
+                                <span class="font-medium text-gray-900">
+                                    <?php echo $valor != "" ? $valor : "—"; ?>
+                                </span>
+                            </div>
+                            <?php if($valor_adesao != ""){ ?>
+                                <div class="flex items-center justify-between">
+                                    <span>Taxa de adesão</span>
+                                    <span class="font-medium text-gray-900"><?php echo $valor_adesao; ?></span>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
 
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-shield-halved text-secondary mr-2"></i>
+                            Garantias e Segurança
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                            <div class="flex items-center space-x-2 trust-badge">
+                                <i class="fas fa-lock text-secondary"></i>
+                                <span>Dados criptografados</span>
+                            </div>
+                            <div class="flex items-center space-x-2 trust-badge">
+                                <i class="fas fa-credit-card text-secondary"></i>
+                                <span>Pagamentos seguros</span>
+                            </div>
+                            <div class="flex items-center space-x-2 trust-badge">
+                                <i class="fas fa-headset text-secondary"></i>
+                                <span>Suporte dedicado</span>
+                            </div>
+                            <div class="flex items-center space-x-2 trust-badge">
+                                <i class="fas fa-thumbs-up text-secondary"></i>
+                                <span>Compra confiável</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 fade-in product-highlight">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            <i class="fas fa-star text-accent mr-2"></i>
+                            Benefícios inclusos
+                        </h3>
+                        <ul class="space-y-2 text-sm text-gray-700">
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-secondary mr-2"></i>
+                                Assistência completa para sua família
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-secondary mr-2"></i>
+                                Rede de atendimento nacional
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check text-secondary mr-2"></i>
+                                Ativação rápida e sem burocracia
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
 </div>
 
-</div>
-
-<!-- [FIM :: DIV GERAL]#########################################################################-->
+<script>
+    (function () {
+        var countdown = document.getElementById('countdown');
+        if (!countdown) {
+            return;
+        }
+        var totalSeconds = 14 * 60 + 59;
+        var interval = setInterval(function () {
+            if (totalSeconds <= 0) {
+                clearInterval(interval);
+                return;
+            }
+            totalSeconds -= 1;
+            var minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+            var seconds = String(totalSeconds % 60).padStart(2, '0');
+            countdown.textContent = minutes + ':' + seconds;
+        }, 1000);
+    })();
+</script>
 
 </body>
 </html>
